@@ -1,0 +1,5883 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>GSTFlow Local</title>
+
+<style>
+
+/* =========================================================
+   GSTFlow Local — SaaS Dashboard
+   ========================================================= */
+
+:root{
+  --bg:#f5f7fb;
+  --surface:#ffffff;
+  --surface-2:#f8fafc;
+  --border:#e5e7eb;
+  --text:#111827;
+  --muted:#6b7280;
+  --muted-2:#9ca3af;
+  --primary:#111827;
+  --primary-hover:#1f2937;
+  --green:#15803d;
+  --green-bg:#dcfce7;
+  --yellow:#a16207;
+  --yellow-bg:#fef3c7;
+  --red:#b91c1c;
+  --red-bg:#fee2e2;
+  --blue:#2563eb;
+  --blue-bg:#dbeafe;
+  --shadow:0 8px 30px rgba(15,23,42,.06);
+  --shadow-lg:0 20px 60px rgba(15,23,42,.15);
+  --radius:16px;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+button,
+input,
+select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+
+/* =========================================================
+   APP LAYOUT
+   ========================================================= */
+
+.app{
+  min-height:100vh;
+  display:flex;
+}
+
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.sidebar{
+  width:250px;
+  min-height:100vh;
+  background:#111827;
+  color:#fff;
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  display:flex;
+  flex-direction:column;
+  z-index:100;
+  transition:.2s ease;
+}
+
+.logo{
+  padding:25px 22px 22px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.logo-main{
+  font-size:22px;
+  font-weight:800;
+  letter-spacing:-.5px;
+}
+
+.logo-sub{
+  color:#9ca3af;
+}
+
+.logo-tag{
+  margin-top:7px;
+  font-size:11px;
+  color:#9ca3af;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.logo-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#4ade80;
+  display:inline-block;
+}
+
+.nav{
+  padding:18px 12px;
+  flex:1;
+}
+
+.nav-label{
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  color:#6b7280;
+  padding:0 11px 8px;
+}
+
+.nav-item{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  width:100%;
+  padding:11px 12px;
+  border-radius:10px;
+  color:#cbd5e1;
+  font-size:13px;
+  margin-bottom:4px;
+  border:0;
+  background:transparent;
+  text-align:left;
+}
+
+.nav-item:hover{
+  background:rgba(255,255,255,.07);
+  color:#fff;
+}
+
+.nav-item.active{
+  background:#fff;
+  color:#111827;
+}
+
+.nav-icon{
+  width:20px;
+  text-align:center;
+  font-size:15px;
+}
+
+.sidebar-bottom{
+  padding:16px;
+  border-top:1px solid rgba(255,255,255,.08);
+}
+
+.local-box{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:12px;
+  padding:12px;
+}
+
+.local-title{
+  font-size:12px;
+  font-weight:700;
+  margin-bottom:4px;
+}
+
+.local-text{
+  color:#9ca3af;
+  font-size:11px;
+  line-height:1.5;
+}
+
+
+/* =========================================================
+   MAIN
+   ========================================================= */
+
+.main{
+  margin-left:250px;
+  width:calc(100% - 250px);
+  min-height:100vh;
+}
+
+.topbar{
+  height:72px;
+  background:rgba(255,255,255,.92);
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 30px;
+  position:sticky;
+  top:0;
+  z-index:50;
+  backdrop-filter:blur(12px);
+}
+
+.topbar-left{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.mobile-menu{
+  display:none;
+  border:0;
+  background:var(--surface-2);
+  border-radius:9px;
+  padding:8px 10px;
+}
+
+.page-title{
+  font-size:15px;
+  font-weight:700;
+}
+
+.page-subtitle{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:2px;
+}
+
+.topbar-right{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.user-badge{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  padding:7px 10px;
+  border:1px solid var(--border);
+  border-radius:999px;
+  background:#fff;
+  color:var(--text);
+  font-size:11px;
+  font-weight:650;
+}
+
+.user-role{
+  color:var(--muted);
+  font-size:10px;
+  font-weight:600;
+}
+
+.logout-btn{
+  border:1px solid var(--border);
+  background:#fff;
+  color:var(--text);
+  border-radius:9px;
+  padding:8px 11px;
+  font-size:11px;
+  font-weight:700;
+}
+
+.logout-btn:hover{
+  background:#f8fafc;
+}
+
+.system-status{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  background:#ecfdf3;
+  color:#166534;
+  border:1px solid #bbf7d0;
+  border-radius:999px;
+  padding:7px 11px;
+  font-size:11px;
+  font-weight:600;
+}
+
+.system-dot{
+  width:7px;
+  height:7px;
+  background:#22c55e;
+  border-radius:50%;
+}
+
+.content{
+  padding:30px;
+  max-width:1600px;
+  margin:auto;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.hero{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:20px;
+  margin-bottom:24px;
+}
+
+.hero h1{
+  margin:0;
+  font-size:28px;
+  letter-spacing:-.6px;
+}
+
+.hero p{
+  margin:7px 0 0;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.hero-actions{
+  display:flex;
+  gap:9px;
+  flex-wrap:wrap;
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.btn{
+  border:0;
+  border-radius:10px;
+  padding:10px 14px;
+  font-size:12px;
+  font-weight:650;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  transition:.15s ease;
+}
+
+.btn:hover{
+  transform:translateY(-1px);
+}
+
+.btn-primary{
+  background:var(--primary);
+  color:#fff;
+}
+
+.btn-primary:hover{
+  background:var(--primary-hover);
+}
+
+.btn-secondary{
+  background:#fff;
+  color:var(--text);
+  border:1px solid var(--border);
+}
+
+.btn-secondary:hover{
+  background:#f8fafc;
+}
+
+.btn-danger{
+  background:#fff;
+  color:var(--red);
+  border:1px solid #fecaca;
+}
+
+.btn-danger:hover{
+  background:#fef2f2;
+}
+
+.btn-success{
+  background:var(--green);
+  color:#fff;
+}
+
+.btn-small{
+  padding:7px 10px;
+  font-size:11px;
+  border-radius:8px;
+}
+
+
+/* =========================================================
+   STATS
+   ========================================================= */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:15px;
+  margin-bottom:24px;
+}
+
+.stat-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:18px;
+  box-shadow:var(--shadow);
+}
+
+.stat-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:14px;
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:12px;
+  font-weight:600;
+}
+
+.stat-icon{
+  width:34px;
+  height:34px;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--surface-2);
+  font-size:16px;
+}
+
+.stat-number{
+  font-size:25px;
+  line-height:1;
+  font-weight:800;
+  letter-spacing:-.5px;
+}
+
+.stat-note{
+  color:var(--muted);
+  font-size:10px;
+  margin-top:9px;
+}
+
+
+/* =========================================================
+   DASHBOARD GRID
+   ========================================================= */
+
+.dashboard-grid{
+  display:grid;
+  grid-template-columns:1.5fr .9fr;
+  gap:20px;
+  margin-bottom:24px;
+}
+
+
+/* =========================================================
+   CARDS
+   ========================================================= */
+
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+}
+
+.card-header{
+  padding:18px 20px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+}
+
+.card-title{
+  font-size:14px;
+  font-weight:750;
+}
+
+.card-subtitle{
+  color:var(--muted);
+  font-size:11px;
+  margin-top:3px;
+}
+
+.card-body{
+  padding:20px;
+}
+
+
+/* =========================================================
+   UPLOAD
+   ========================================================= */
+
+.upload-zone{
+  border:1.5px dashed #cbd5e1;
+  border-radius:14px;
+  background:#f8fafc;
+  padding:30px 20px;
+  text-align:center;
+  transition:.2s ease;
+}
+
+.upload-zone.dragover{
+  border-color:#111827;
+  background:#f1f5f9;
+}
+
+.upload-icon{
+  width:48px;
+  height:48px;
+  border-radius:14px;
+  background:#e5e7eb;
+  margin:0 auto 12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:21px;
+}
+
+.upload-title{
+  font-size:14px;
+  font-weight:750;
+}
+
+.upload-description{
+  color:var(--muted);
+  font-size:11px;
+  margin:6px auto 16px;
+  max-width:420px;
+  line-height:1.5;
+}
+
+.file-input{
+  display:none;
+}
+
+.upload-actions{
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.upload-status{
+  margin-top:14px;
+  background:#f8fafc;
+  border-radius:10px;
+  padding:10px;
+  font-size:11px;
+  color:var(--muted);
+  white-space:pre-wrap;
+  display:none;
+  text-align:left;
+}
+
+.upload-list{
+  margin-top:14px;
+  display:none;
+}
+
+.upload-file{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:9px 10px;
+  background:#f8fafc;
+  border-radius:9px;
+  margin-top:6px;
+  font-size:11px;
+}
+
+.upload-file-name{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.upload-file-status{
+  color:var(--muted);
+  white-space:nowrap;
+}
+
+
+/* =========================================================
+   CLIENT PANEL
+   ========================================================= */
+
+.client-list{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.client-item{
+  border:1px solid var(--border);
+  border-radius:11px;
+  padding:11px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  cursor:pointer;
+  transition:.15s ease;
+}
+
+.client-item:hover{
+  background:#f8fafc;
+  border-color:#d1d5db;
+}
+
+.client-left{
+  min-width:0;
+}
+
+.client-name{
+  font-size:12px;
+  font-weight:700;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.client-gstin{
+  color:var(--muted);
+  font-size:10px;
+  margin-top:3px;
+}
+
+.client-count{
+  background:#f1f5f9;
+  border-radius:999px;
+  padding:4px 8px;
+  font-size:10px;
+  font-weight:700;
+}
+
+
+/* =========================================================
+   INVOICE SECTION
+   ========================================================= */
+
+.invoice-card{
+  margin-top:0;
+}
+
+.invoice-toolbar{
+  padding:15px 20px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.toolbar-left{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.search-box{
+  position:relative;
+}
+
+.search-box input{
+  width:240px;
+  border:1px solid var(--border);
+  border-radius:9px;
+  padding:9px 11px 9px 32px;
+  outline:none;
+  background:#fff;
+  font-size:11px;
+}
+
+.search-box input:focus{
+  border-color:#9ca3af;
+  box-shadow:0 0 0 3px rgba(17,24,39,.05);
+}
+
+.search-icon{
+  position:absolute;
+  left:11px;
+  top:8px;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.filter{
+  border:1px solid var(--border);
+  border-radius:9px;
+  padding:9px 10px;
+  background:#fff;
+  font-size:11px;
+  outline:none;
+  min-width:145px;
+}
+
+.result-count{
+  color:var(--muted);
+  font-size:11px;
+}
+
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.table-wrap{
+  overflow:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:11px;
+}
+
+th{
+  text-align:left;
+  color:var(--muted);
+  font-size:10px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  background:#fafafa;
+  border-bottom:1px solid var(--border);
+  padding:11px 13px;
+  white-space:nowrap;
+}
+
+td{
+  padding:13px;
+  border-bottom:1px solid #f0f2f5;
+  vertical-align:middle;
+}
+
+tbody tr{
+  transition:.12s ease;
+}
+
+tbody tr:hover{
+  background:#fafbfc;
+}
+
+.business-cell{
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+}
+
+.business-name{
+  font-weight:700;
+}
+
+.business-gstin{
+  color:var(--muted);
+  font-size:9px;
+}
+
+.supplier{
+  font-weight:600;
+}
+
+.invoice-number{
+  font-weight:700;
+}
+
+.amount{
+  font-weight:750;
+  white-space:nowrap;
+}
+
+.confidence{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.confidence-bar{
+  width:45px;
+  height:5px;
+  border-radius:999px;
+  background:#e5e7eb;
+  overflow:hidden;
+}
+
+.confidence-fill{
+  height:100%;
+  background:#111827;
+  border-radius:999px;
+}
+
+.status{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:5px 8px;
+  border-radius:999px;
+  font-size:9px;
+  font-weight:700;
+  white-space:nowrap;
+}
+
+.status-dot{
+  width:5px;
+  height:5px;
+  border-radius:50%;
+}
+
+.status-approved{
+  color:#166534;
+  background:#dcfce7;
+}
+
+.status-approved .status-dot{
+  background:#22c55e;
+}
+
+.status-verified{
+  color:#1d4ed8;
+  background:#dbeafe;
+}
+
+.status-verified .status-dot{
+  background:#3b82f6;
+}
+
+.status-review{
+  color:#92400e;
+  background:#fef3c7;
+}
+
+.status-review .status-dot{
+  background:#f59e0b;
+}
+
+.status-other{
+  color:#475569;
+  background:#f1f5f9;
+}
+
+.status-other .status-dot{
+  background:#64748b;
+}
+
+.actions{
+  display:flex;
+  gap:5px;
+  white-space:nowrap;
+}
+
+.empty{
+  text-align:center;
+  padding:45px 20px;
+  color:var(--muted);
+}
+
+.empty-icon{
+  font-size:25px;
+  margin-bottom:8px;
+}
+
+.empty-title{
+  font-weight:700;
+  color:var(--text);
+  margin-bottom:4px;
+}
+
+.empty-text{
+  font-size:11px;
+}
+
+
+/* =========================================================
+   REVIEW QUEUE
+   ========================================================= */
+
+.review-list{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.review-item{
+  padding:10px;
+  border:1px solid #fde68a;
+  background:#fffbeb;
+  border-radius:10px;
+}
+
+.review-title{
+  font-size:11px;
+  font-weight:700;
+}
+
+.review-meta{
+  color:var(--muted);
+  font-size:9px;
+  margin-top:3px;
+}
+
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,.55);
+  z-index:1000;
+  padding:25px;
+  overflow:auto;
+}
+
+.modal.open{
+  display:block;
+}
+
+.modal-box{
+  max-width:1050px;
+  margin:20px auto;
+  background:#fff;
+  border-radius:18px;
+  box-shadow:var(--shadow-lg);
+  overflow:hidden;
+}
+
+.modal-header{
+  padding:20px 22px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+}
+
+.modal-title{
+  font-size:18px;
+  font-weight:800;
+}
+
+.modal-subtitle{
+  color:var(--muted);
+  font-size:11px;
+  margin-top:5px;
+}
+
+.close-btn{
+  width:34px;
+  height:34px;
+  border:0;
+  background:#f1f5f9;
+  border-radius:9px;
+  font-size:18px;
+}
+
+.modal-body{
+  padding:22px;
+}
+
+.detail-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+}
+
+.detail{
+  border:1px solid var(--border);
+  background:#fafbfc;
+  border-radius:11px;
+  padding:12px;
+}
+
+.detail-label{
+  color:var(--muted);
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+  font-weight:700;
+  margin-bottom:5px;
+}
+
+.detail-value{
+  font-size:12px;
+  font-weight:700;
+  word-break:break-word;
+}
+
+.section-heading{
+  font-size:12px;
+  font-weight:800;
+  margin:23px 0 9px;
+}
+
+.validation{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.validation-item{
+  border-radius:9px;
+  padding:8px 10px;
+  font-size:10px;
+  font-weight:600;
+}
+
+.validation-pass{
+  background:#dcfce7;
+  color:#166534;
+}
+
+.validation-fail{
+  background:#fee2e2;
+  color:#991b1b;
+}
+
+.item-table{
+  border:1px solid var(--border);
+  border-radius:11px;
+  overflow:hidden;
+}
+
+.total-row{
+  display:flex;
+  justify-content:flex-end;
+  margin-top:12px;
+}
+
+.total-box{
+  background:#111827;
+  color:#fff;
+  border-radius:11px;
+  padding:12px 16px;
+  font-size:13px;
+  font-weight:750;
+}
+
+.modal-footer{
+  padding:16px 22px;
+  border-top:1px solid var(--border);
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.modal-footer-left,
+.modal-footer-right{
+  display:flex;
+  gap:8px;
+}
+
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+.toast{
+  position:fixed;
+  right:22px;
+  bottom:22px;
+  background:#111827;
+  color:#fff;
+  border-radius:11px;
+  padding:12px 15px;
+  font-size:11px;
+  box-shadow:var(--shadow-lg);
+  transform:translateY(20px);
+  opacity:0;
+  pointer-events:none;
+  transition:.2s ease;
+  z-index:2000;
+  max-width:360px;
+}
+
+.toast.show{
+  transform:translateY(0);
+  opacity:1;
+}
+
+.toast.success{
+  background:#166534;
+}
+
+.toast.error{
+  background:#991b1b;
+}
+
+
+/* =========================================================
+   MOBILE SIDEBAR OVERLAY
+   ========================================================= */
+
+.sidebar-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,.45);
+  z-index:90;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media(max-width:1150px){
+
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .dashboard-grid{
+    grid-template-columns:1fr;
+  }
+
+  .detail-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+}
+
+@media(max-width:850px){
+
+  .sidebar{
+    transform:translateX(-100%);
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .sidebar-overlay.open{
+    display:block;
+  }
+
+  .main{
+    margin-left:0;
+    width:100%;
+  }
+
+  .mobile-menu{
+    display:block;
+  }
+
+  .topbar{
+    padding:0 16px;
+  }
+
+  .content{
+    padding:20px 16px;
+  }
+
+  .hero{
+    flex-direction:column;
+  }
+
+  .hero-actions{
+    width:100%;
+  }
+
+  .hero-actions .btn{
+    flex:1;
+  }
+
+}
+
+@media(max-width:600px){
+
+  .stats{
+    grid-template-columns:1fr;
+  }
+
+  .detail-grid{
+    grid-template-columns:1fr;
+  }
+
+  .system-status{
+    display:none;
+  }
+
+  .page-subtitle{
+    display:none;
+  }
+
+  .search-box input{
+    width:100%;
+  }
+
+  .search-box{
+    width:100%;
+  }
+
+  .filter{
+    flex:1;
+    min-width:0;
+  }
+
+  .invoice-toolbar{
+    align-items:stretch;
+  }
+
+  .toolbar-left{
+    width:100%;
+  }
+
+  .toolbar-left > *{
+    width:100%;
+  }
+
+  .modal{
+    padding:8px;
+  }
+
+  .modal-box{
+    margin:5px auto;
+  }
+
+  .modal-header,
+  .modal-body,
+  .modal-footer{
+    padding:16px;
+  }
+
+  .modal-footer{
+    flex-direction:column;
+  }
+
+  .modal-footer-left,
+  .modal-footer-right{
+    width:100%;
+  }
+
+  .modal-footer .btn{
+    flex:1;
+  }
+
+}
+
+
+/* =========================================================
+   AUTHENTICATION GATE
+   ========================================================= */
+.auth-screen{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  background:linear-gradient(135deg,#f8fafc 0%,#eef2f7 100%);
+}
+.auth-card{
+  width:min(430px,100%);
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:22px;
+  box-shadow:0 24px 70px rgba(15,23,42,.12);
+  padding:34px;
+}
+.auth-brand{font-size:28px;font-weight:800;letter-spacing:-.04em;color:var(--text);}
+.auth-brand span{font-size:12px;font-weight:700;color:#64748b;margin-left:6px;vertical-align:middle;}
+.auth-local{display:inline-flex;align-items:center;gap:7px;margin-top:10px;color:#15803d;font-size:13px;font-weight:700;}
+.auth-local-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 4px #dcfce7;}
+.auth-title{margin:30px 0 7px;font-size:25px;font-weight:750;letter-spacing:-.025em;}
+.auth-subtitle{margin:0 0 24px;color:var(--muted);font-size:14px;line-height:1.55;}
+.auth-field{margin-bottom:16px;}
+.auth-field label{display:block;margin-bottom:7px;font-size:13px;font-weight:700;color:#374151;}
+.auth-field input{width:100%;box-sizing:border-box;border:1px solid #d1d5db;border-radius:11px;padding:12px 13px;font:inherit;color:var(--text);background:#fff;outline:none;transition:.15s;}
+.auth-field input:focus{border-color:#94a3b8;box-shadow:0 0 0 3px #e2e8f0;}
+.auth-submit{width:100%;border:0;border-radius:11px;padding:12px 16px;background:#111827;color:#fff;font:inherit;font-weight:750;cursor:pointer;margin-top:4px;}
+.auth-submit:hover{background:#1f2937;}
+.auth-submit:disabled{opacity:.6;cursor:wait;}
+.auth-error{display:none;margin:0 0 16px;padding:11px 12px;border-radius:10px;background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;font-size:13px;line-height:1.45;}
+.auth-success{display:none;margin:0 0 16px;padding:11px 12px;border-radius:10px;background:#f0fdf4;border:1px solid #bbf7d0;color:#166534;font-size:13px;line-height:1.45;}
+.auth-switch{margin-top:16px;text-align:center;font-size:12px;color:#64748b;}
+.auth-switch button{border:0;background:none;padding:0;color:#111827;font:inherit;font-weight:750;cursor:pointer;text-decoration:underline;}
+.auth-switch button:hover{color:#475569;}
+.auth-footer{margin-top:22px;padding-top:18px;border-top:1px solid #eef2f7;color:#94a3b8;font-size:12px;line-height:1.5;}
+
+</style>
+
+</head>
+
+
+<body>
+
+<div id="authScreen" class="auth-screen" style="display:none;">
+  <div class="auth-card">
+    <div class="auth-brand">GSTFlow <span>Local</span></div>
+    <div class="auth-local"><span class="auth-local-dot"></span> Privacy-first local processing</div>
+
+    <div id="loginView">
+      <h1 class="auth-title">Welcome back</h1>
+      <p class="auth-subtitle">Sign in to access your GSTFlow workspace and client invoices.</p>
+      <div id="loginError" class="auth-error"></div>
+      <form id="loginForm">
+        <div class="auth-field">
+          <label for="loginUsername">Username</label>
+          <input id="loginUsername" name="username" type="text" autocomplete="username" required autofocus>
+        </div>
+        <div class="auth-field">
+          <label for="loginPassword">Password</label>
+          <input id="loginPassword" name="password" type="password" autocomplete="current-password" required>
+        </div>
+        <button id="loginSubmit" class="auth-submit" type="submit">Sign in</button>
+      </form>
+      <div class="auth-switch">
+        Don't have a GSTFlow account?
+        <button type="button" onclick="showRegisterView()">Create an account</button>
+      </div>
+    </div>
+
+    <div id="registerView" style="display:none;">
+      <h1 class="auth-title">Create your account</h1>
+      <p class="auth-subtitle">Create your GSTFlow workspace. The account you create here becomes the workspace owner.</p>
+      <div id="registerError" class="auth-error"></div>
+      <div id="registerSuccess" class="auth-success"></div>
+      <form id="registerForm">
+        <div class="auth-field">
+          <label for="registerOrganization">Organization / Firm name</label>
+          <input id="registerOrganization" name="organization_name" type="text" autocomplete="organization" required>
+        </div>
+        <div class="auth-field">
+          <label for="registerUsername">Username</label>
+          <input id="registerUsername" name="username" type="text" autocomplete="username" required>
+        </div>
+        <div class="auth-field">
+          <label for="registerPassword">Password</label>
+          <input id="registerPassword" name="password" type="password" autocomplete="new-password" minlength="8" required>
+        </div>
+        <div class="auth-field">
+          <label for="registerConfirmPassword">Confirm password</label>
+          <input id="registerConfirmPassword" name="confirm_password" type="password" autocomplete="new-password" minlength="8" required>
+        </div>
+        <button id="registerSubmit" class="auth-submit" type="submit">Create account</button>
+      </form>
+      <div class="auth-switch">
+        Already have an account?
+        <button type="button" onclick="showLoginView()">Sign in</button>
+      </div>
+    </div>
+
+    <div class="auth-footer">Your session is protected by GSTFlow's server-side authentication and organization access controls.</div>
+  </div>
+</div>
+
+<div id="appShell" class="app-shell" style="display:none;">
+<div class="app">
+
+
+  <!-- =====================================================
+       SIDEBAR
+       ===================================================== -->
+
+  <aside id="sidebar" class="sidebar">
+
+    <div class="logo">
+
+      <div class="logo-main">
+        GSTFlow <span class="logo-sub">Local</span>
+      </div>
+
+      <div class="logo-tag">
+        <span class="logo-dot"></span>
+        Local processing enabled
+      </div>
+
+    </div>
+
+
+    <nav class="nav">
+
+      <div class="nav-label">
+        Workspace
+      </div>
+
+      <button
+        class="nav-item active"
+        onclick="scrollToSection('dashboard')"
+      >
+        <span class="nav-icon">⌂</span>
+        Dashboard
+      </button>
+
+      <button
+        class="nav-item"
+        onclick="scrollToSection('invoices')"
+      >
+        <span class="nav-icon">▤</span>
+        Invoices
+      </button>
+
+      <button
+        class="nav-item"
+        onclick="scrollToSection('clients')"
+      >
+        <span class="nav-icon">◫</span>
+        Clients
+      </button>
+
+      <button
+        class="nav-item"
+        onclick="showReviewQueue()"
+      >
+        <span class="nav-icon">!</span>
+        Review Queue
+      </button>
+
+      <button
+        id="teamNavItem"
+        class="nav-item"
+        onclick="showTeam()"
+        style="display:none;"
+      >
+        <span class="nav-icon">T</span>
+        Team
+      </button>
+
+      <button
+        class="nav-item"
+        onclick="window.location='/api/export.xlsx'"
+      >
+        <span class="nav-icon">↓</span>
+        Export
+      </button>
+
+
+      <div
+        class="nav-label"
+        style="margin-top:22px"
+      >
+        System
+      </div>
+
+      <button
+        class="nav-item"
+        onclick="showAbout()"
+      >
+        <span class="nav-icon">i</span>
+        About GSTFlow
+      </button>
+
+    </nav>
+
+
+    <div class="sidebar-bottom">
+
+      <div class="local-box">
+
+        <div class="local-title">
+          🔒 Privacy first
+        </div>
+
+        <div class="local-text">
+          Invoice OCR and extraction run locally.
+          No paid AI API is required.
+        </div>
+
+      </div>
+
+    </div>
+
+  </aside>
+
+
+  <div
+    id="sidebarOverlay"
+    class="sidebar-overlay"
+    onclick="toggleSidebar()"
+  ></div>
+
+
+  <!-- =====================================================
+       MAIN
+       ===================================================== -->
+
+  <main class="main">
+
+
+    <!-- TOP BAR -->
+
+    <header class="topbar">
+
+      <div class="topbar-left">
+
+        <button
+          class="mobile-menu"
+          onclick="toggleSidebar()"
+        >
+          ☰
+        </button>
+
+        <div>
+
+          <div class="page-title">
+            Invoice Processing Workspace
+          </div>
+
+          <div class="page-subtitle">
+            GST invoice extraction and verification
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="topbar-right">
+
+        <div class="system-status">
+          <span class="system-dot"></span>
+          Local OCR Online
+        </div>
+
+        <div id="userBadge" class="user-badge" style="display:none;">
+          <span id="userName"></span>
+          <span id="userRole" class="user-role"></span>
+        </div>
+
+        <button id="logoutButton" class="logout-btn" type="button" onclick="logout()">
+          Log out
+        </button>
+
+      </div>
+
+    </header>
+
+
+    <div class="content">
+
+
+      <!-- =================================================
+           HERO
+           ================================================= -->
+
+      <section id="dashboard" class="hero">
+
+        <div>
+
+          <h1>
+            Good to see you 👋
+          </h1>
+
+          <p>
+            Process invoices, verify extracted data and keep
+            every client separated automatically.
+          </p>
+
+        </div>
+
+
+        <div class="hero-actions">
+
+          <button
+            class="btn btn-secondary"
+            onclick="document.getElementById('fileInput').click()"
+          >
+            ＋ Upload invoices
+          </button>
+
+          <a
+            class="btn btn-primary"
+            href="/api/export.xlsx"
+          >
+            ↓ Export Excel
+          </a>
+
+        </div>
+
+      </section>
+
+
+      <!-- =================================================
+           STATS
+           ================================================= -->
+
+      <section class="stats">
+
+        <div class="stat-card">
+
+          <div class="stat-top">
+
+            <div class="stat-label">
+              Total invoices
+            </div>
+
+            <div class="stat-icon">
+              ▤
+            </div>
+
+          </div>
+
+          <div
+            id="count"
+            class="stat-number"
+          >
+            0
+          </div>
+
+          <div class="stat-note">
+            All processed invoices
+          </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+          <div class="stat-top">
+
+            <div class="stat-label">
+              Approved
+            </div>
+
+            <div class="stat-icon">
+              ✓
+            </div>
+
+          </div>
+
+          <div
+            id="approved"
+            class="stat-number"
+          >
+            0
+          </div>
+
+          <div class="stat-note">
+            Ready for export
+          </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+          <div class="stat-top">
+
+            <div class="stat-label">
+              Needs review
+            </div>
+
+            <div class="stat-icon">
+              !
+            </div>
+
+          </div>
+
+          <div
+            id="review"
+            class="stat-number"
+          >
+            0
+          </div>
+
+          <div class="stat-note">
+            Requires attention
+          </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+          <div class="stat-top">
+
+            <div class="stat-label">
+              Invoice value
+            </div>
+
+            <div class="stat-icon">
+              ₹
+            </div>
+
+          </div>
+
+          <div
+            id="totalValue"
+            class="stat-number"
+          >
+            ₹0
+          </div>
+
+          <div class="stat-note">
+            Total processed value
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =================================================
+           UPLOAD + CLIENTS
+           ================================================= -->
+
+      <section class="dashboard-grid">
+
+
+        <!-- UPLOAD -->
+
+        <div class="card">
+
+          <div class="card-header">
+
+            <div>
+
+              <div class="card-title">
+                Upload invoices
+              </div>
+
+              <div class="card-subtitle">
+                Process PDF, JPG, PNG and WEBP files locally
+              </div>
+
+            </div>
+
+            <span class="status status-approved">
+              <span class="status-dot"></span>
+              Local
+            </span>
+
+          </div>
+
+
+          <div class="card-body">
+
+            <div
+              id="uploadZone"
+              class="upload-zone"
+            >
+
+              <div class="upload-icon">
+                ↑
+              </div>
+
+              <div class="upload-title">
+                Drop invoice files here
+              </div>
+
+              <div class="upload-description">
+                Upload one or multiple invoices.
+                GSTFlow will extract the data locally
+                and match invoices to registered businesses.
+              </div>
+
+
+              <div class="upload-actions">
+
+                <button
+                  class="btn btn-primary"
+                  onclick="document.getElementById('fileInput').click()"
+                >
+                  Choose files
+                </button>
+
+                <button
+                  class="btn btn-secondary"
+                  onclick="processSelectedFiles()"
+                >
+                  Process selected
+                </button>
+
+              </div>
+
+
+              <input
+                id="fileInput"
+                class="file-input"
+                type="file"
+                accept="image/*,.pdf"
+                multiple
+              >
+
+
+              <div
+                id="uploadList"
+                class="upload-list"
+              ></div>
+
+
+              <div
+                id="uploadStatus"
+                class="upload-status"
+              ></div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- CLIENTS -->
+
+        <div
+          id="clients"
+          class="card"
+        >
+
+          <div class="card-header">
+
+            <div>
+
+              <div class="card-title">
+                Client businesses
+              </div>
+
+              <div class="card-subtitle">
+                Registered GST businesses
+              </div>
+
+            </div>
+
+            <button
+              class="btn btn-secondary btn-small"
+              onclick="showAddBusiness()"
+            >
+              ＋ Add client
+            </button>
+
+          </div>
+
+
+          <div class="card-body">
+
+            <div
+              id="clientList"
+              class="client-list"
+            >
+
+              <div class="empty">
+                Loading clients...
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =================================================
+           INVOICE TABLE
+           ================================================= -->
+
+
+      <!-- =================================================
+           TEAM
+           Owner-only staff management
+           ================================================= -->
+
+      <section
+        id="teamSection"
+        class="card"
+        style="display:none;margin-bottom:20px;"
+      >
+
+        <div class="card-header">
+
+          <div>
+            <div class="card-title">
+              Team
+            </div>
+
+            <div class="card-subtitle">
+              Manage staff accounts and client access
+            </div>
+          </div>
+
+          <button
+            class="btn btn-primary"
+            onclick="showCreateStaffModal()"
+          >
+            + Add staff
+          </button>
+
+        </div>
+
+
+        <div
+          id="teamError"
+          class="auth-error"
+          style="display:none;margin-top:16px;"
+        ></div>
+
+
+        <div
+          id="teamLoading"
+          class="empty"
+          style="margin-top:16px;"
+        >
+          Loading team...
+        </div>
+
+
+        <div
+          id="teamTableWrap"
+          style="display:none;margin-top:16px;overflow-x:auto;"
+        >
+
+          <table class="invoice-table">
+
+            <thead>
+              <tr>
+                <th>Staff member</th>
+                <th>Status</th>
+                <th>Businesses</th>
+                <th>Last login</th>
+                <th></th>
+              </tr>
+            </thead>
+
+            <tbody id="teamRows"></tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+      <section
+        id="invoices"
+        class="card invoice-card"
+      >
+
+        <div class="card-header">
+
+          <div>
+
+            <div class="card-title">
+              Processed invoices
+            </div>
+
+            <div class="card-subtitle">
+              Review extracted information before approval
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="invoice-toolbar">
+
+          <div class="toolbar-left">
+
+            <div class="search-box">
+
+              <span class="search-icon">
+                ⌕
+              </span>
+
+              <input
+                id="searchInput"
+                type="text"
+                placeholder="Search invoice, supplier or GSTIN..."
+                oninput="renderInvoices()"
+              >
+
+            </div>
+
+
+            <select
+              id="businessFilter"
+              class="filter"
+              onchange="renderInvoices()"
+            >
+
+              <option value="">
+                All clients
+              </option>
+
+            </select>
+
+
+            <select
+              id="statusFilter"
+              class="filter"
+              onchange="renderInvoices()"
+            >
+
+              <option value="">
+                All statuses
+              </option>
+
+              <option value="approved">
+                Approved
+              </option>
+
+              <option value="verified">
+                Verified
+              </option>
+
+              <option value="needs_review">
+                Needs review
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div
+            id="resultCount"
+            class="result-count"
+          >
+            0 invoices
+          </div>
+
+        </div>
+
+
+        <div class="table-wrap">
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  Client
+                </th>
+
+                <th>
+                  Supplier
+                </th>
+
+                <th>
+                  Invoice
+                </th>
+
+                <th>
+                  Date
+                </th>
+
+                <th>
+                  Total
+                </th>
+
+                <th>
+                  Confidence
+                </th>
+
+                <th>
+                  Status
+                </th>
+
+                <th>
+                  Actions
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody id="rows">
+
+              <tr>
+
+                <td
+                  colspan="8"
+                  class="empty"
+                >
+                  Loading invoices...
+                </td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+
+    </div>
+
+  </main>
+
+</div>
+
+
+<!-- =======================================================
+     INVOICE MODAL
+     ======================================================= -->
+
+<div
+  id="invoiceModal"
+  class="modal"
+  onclick="closeModal(event)"
+>
+
+  <div
+    class="modal-box"
+    onclick="event.stopPropagation()"
+  >
+
+
+    <div class="modal-header">
+
+      <div>
+
+        <div
+          id="modalTitle"
+          class="modal-title"
+        >
+          Invoice details
+        </div>
+
+        <div
+          id="modalSubtitle"
+          class="modal-subtitle"
+        ></div>
+
+      </div>
+
+
+      <button
+        class="close-btn"
+        onclick="hideModal()"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <div class="modal-body">
+
+
+      <div
+        id="invoiceDetails"
+        class="detail-grid"
+      ></div>
+
+
+      <div class="section-heading">
+        Validation
+      </div>
+
+
+      <div
+        id="validation"
+        class="validation"
+      ></div>
+
+
+      <div class="section-heading">
+        Invoice items
+      </div>
+
+
+      <div class="item-table">
+
+        <div class="table-wrap">
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  #
+                </th>
+
+                <th>
+                  Description
+                </th>
+
+                <th>
+                  HSN/SAC
+                </th>
+
+                <th>
+                  Qty
+                </th>
+
+                <th>
+                  Rate
+                </th>
+
+                <th>
+                  Taxable
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody id="itemRows"></tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+
+      <div
+        id="itemsTotal"
+        class="total-row"
+      ></div>
+
+    </div>
+
+
+    <div class="modal-footer">
+
+      <div class="modal-footer-left">
+
+        <button
+          class="btn btn-danger"
+          id="modalDeleteButton"
+        >
+          Delete
+        </button>
+
+      </div>
+
+
+      <div class="modal-footer-right">
+
+        <button
+          class="btn btn-secondary"
+          onclick="hideModal()"
+        >
+          Close
+        </button>
+
+        <button
+          class="btn btn-success"
+          id="modalApproveButton"
+        >
+          ✓ Approve invoice
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =======================================================
+     ADD BUSINESS MODAL
+     ======================================================= -->
+
+<div
+  id="businessModal"
+  class="modal"
+  onclick="closeBusinessModal(event)"
+>
+
+  <div
+    class="modal-box"
+    style="max-width:500px"
+    onclick="event.stopPropagation()"
+  >
+
+    <div class="modal-header">
+
+      <div>
+
+        <div class="modal-title">
+          Add client business
+        </div>
+
+        <div class="modal-subtitle">
+          GSTIN matching uses this registered GSTIN
+        </div>
+
+      </div>
+
+      <button
+        class="close-btn"
+        onclick="hideAddBusiness()"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <div class="modal-body">
+
+      <label
+        style="font-size:11px;font-weight:700"
+      >
+        Business name
+      </label>
+
+      <input
+        id="businessNameInput"
+        type="text"
+        placeholder="e.g. Company A Pvt. Ltd."
+        style="
+          width:100%;
+          margin-top:7px;
+          padding:11px;
+          border:1px solid var(--border);
+          border-radius:9px;
+          outline:none;
+          margin-bottom:15px;
+        "
+      >
+
+
+      <label
+        style="font-size:11px;font-weight:700"
+      >
+        GSTIN
+      </label>
+
+      <input
+        id="businessGstinInput"
+        type="text"
+        placeholder="e.g. 07AAAAA1111A1Z1"
+        style="
+          width:100%;
+          margin-top:7px;
+          padding:11px;
+          border:1px solid var(--border);
+          border-radius:9px;
+          outline:none;
+          text-transform:uppercase;
+        "
+      >
+
+    </div>
+
+
+    <div class="modal-footer">
+
+      <div></div>
+
+      <div class="modal-footer-right">
+
+        <button
+          class="btn btn-secondary"
+          onclick="hideAddBusiness()"
+        >
+          Cancel
+        </button>
+
+        <button
+          class="btn btn-primary"
+          onclick="addBusiness()"
+        >
+          Add business
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<!-- =======================================================
+     CREATE STAFF MODAL
+     ======================================================= -->
+
+<div
+  id="createStaffModal"
+  class="modal"
+  onclick="closeCreateStaff(event)"
+>
+
+  <div
+    class="modal-box"
+    style="max-width:480px"
+    onclick="event.stopPropagation()"
+  >
+
+    <div class="modal-header">
+
+      <div>
+        <div class="modal-title">
+          Add staff member
+        </div>
+
+        <div class="modal-subtitle">
+          Create a staff account in your organization.
+        </div>
+      </div>
+
+      <button
+        class="close-btn"
+        onclick="hideCreateStaffModal()"
+      >
+        ?
+      </button>
+
+    </div>
+
+
+    <div class="modal-body">
+
+      <div
+        id="createStaffError"
+        class="auth-error"
+        style="display:none;"
+      ></div>
+
+      <label style="font-size:11px;font-weight:700;">
+        Username
+      </label>
+
+      <input
+        id="staffUsernameInput"
+        type="text"
+        autocomplete="off"
+        placeholder="e.g. staff_01"
+        style="
+          width:100%;
+          margin-top:7px;
+          padding:11px;
+          border:1px solid var(--border);
+          border-radius:9px;
+          outline:none;
+        "
+      >
+
+      <label
+        style="
+          display:block;
+          margin-top:16px;
+          font-size:11px;
+          font-weight:700;
+        "
+      >
+        Temporary password
+      </label>
+
+      <input
+        id="staffPasswordInput"
+        type="password"
+        autocomplete="new-password"
+        placeholder="At least 8 characters"
+        style="
+          width:100%;
+          margin-top:7px;
+          padding:11px;
+          border:1px solid var(--border);
+          border-radius:9px;
+          outline:none;
+        "
+      >
+
+    </div>
+
+
+    <div class="modal-footer">
+
+      <div></div>
+
+      <div class="modal-footer-right">
+
+        <button
+          class="btn btn-secondary"
+          onclick="hideCreateStaffModal()"
+        >
+          Cancel
+        </button>
+
+        <button
+          id="createStaffButton"
+          class="btn btn-primary"
+          onclick="createStaff()"
+        >
+          Create staff
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<!-- =======================================================
+     STAFF DETAIL / ASSIGNMENT MODAL
+     ======================================================= -->
+
+<div
+  id="staffDetailModal"
+  class="modal"
+  onclick="closeStaffDetail(event)"
+>
+
+  <div
+    class="modal-box"
+    style="max-width:620px"
+    onclick="event.stopPropagation()"
+  >
+
+    <div class="modal-header">
+
+      <div>
+        <div
+          id="staffDetailTitle"
+          class="modal-title"
+        >
+          Staff member
+        </div>
+
+        <div
+          id="staffDetailSubtitle"
+          class="modal-subtitle"
+        ></div>
+      </div>
+
+      <button
+        class="close-btn"
+        onclick="hideStaffDetailModal()"
+      >
+        ?
+      </button>
+
+    </div>
+
+
+    <div class="modal-body">
+
+      <div
+        id="staffDetailError"
+        class="auth-error"
+        style="display:none;"
+      ></div>
+
+
+      <div
+        style="
+          display:grid;
+          grid-template-columns:1fr 1fr;
+          gap:12px;
+          margin-bottom:18px;
+        "
+      >
+
+        <div class="stat-card">
+          <div class="stat-label">Status</div>
+          <div
+            id="staffDetailStatus"
+            class="stat-value"
+            style="font-size:18px;"
+          ></div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-label">Businesses</div>
+          <div
+            id="staffDetailCount"
+            class="stat-value"
+            style="font-size:18px;"
+          ></div>
+        </div>
+
+      </div>
+
+
+      <div class="card-title" style="font-size:14px;">
+        Assigned businesses
+      </div>
+
+      <div
+        id="staffAssignedBusinesses"
+        style="margin-top:10px;"
+      ></div>
+
+
+      <div
+        class="card-title"
+        style="
+          font-size:14px;
+          margin-top:24px;
+        "
+      >
+        Assign a business
+      </div>
+
+      <div
+        style="
+          display:flex;
+          gap:10px;
+          margin-top:10px;
+        "
+      >
+
+        <select
+          id="staffBusinessSelect"
+          class="filter"
+          style="flex:1;"
+        ></select>
+
+        <button
+          class="btn btn-primary"
+          onclick="assignSelectedBusiness()"
+        >
+          Assign
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="modal-footer">
+
+      <div>
+
+        <button
+          id="deactivateStaffButton"
+          class="btn btn-secondary"
+          onclick="deactivateSelectedStaff()"
+          style="color:#b91c1c;"
+        >
+          Deactivate staff
+        </button>
+
+      </div>
+
+      <div class="modal-footer-right">
+
+        <button
+          class="btn btn-secondary"
+          onclick="hideStaffDetailModal()"
+        >
+          Close
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =======================================================
+     ABOUT MODAL
+     ======================================================= -->
+
+<div
+  id="aboutModal"
+  class="modal"
+  onclick="closeAbout(event)"
+>
+
+  <div
+    class="modal-box"
+    style="max-width:520px"
+    onclick="event.stopPropagation()"
+  >
+
+    <div class="modal-header">
+
+      <div>
+
+        <div class="modal-title">
+          GSTFlow Local
+        </div>
+
+        <div class="modal-subtitle">
+          Local invoice processing workspace
+        </div>
+
+      </div>
+
+      <button
+        class="close-btn"
+        onclick="hideAbout()"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <div class="modal-body">
+
+      <div
+        style="
+          background:#f8fafc;
+          border:1px solid var(--border);
+          border-radius:12px;
+          padding:15px;
+          font-size:12px;
+          line-height:1.7;
+          color:var(--muted);
+        "
+      >
+
+        <strong
+          style="
+            color:var(--text);
+            display:block;
+            margin-bottom:6px;
+          "
+        >
+          Privacy-first invoice processing
+        </strong>
+
+        GSTFlow Local is designed to process invoice
+        documents locally, extract GST information,
+        identify the associated client business,
+        validate invoice arithmetic and prepare
+        structured data for review and export.
+
+      </div>
+
+
+      <div
+        style="
+          margin-top:15px;
+          display:grid;
+          grid-template-columns:1fr 1fr;
+          gap:9px;
+        "
+      >
+
+        <div class="detail">
+
+          <div class="detail-label">
+            OCR
+          </div>
+
+          <div class="detail-value">
+            Local
+          </div>
+
+        </div>
+
+
+        <div class="detail">
+
+          <div class="detail-label">
+            AI API
+          </div>
+
+          <div class="detail-value">
+            Not required
+          </div>
+
+        </div>
+
+
+        <div class="detail">
+
+          <div class="detail-label">
+            Export
+          </div>
+
+          <div class="detail-value">
+            Excel
+          </div>
+
+        </div>
+
+
+        <div class="detail">
+
+          <div class="detail-label">
+            Client separation
+          </div>
+
+          <div class="detail-value">
+            GSTIN
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="modal-footer">
+
+      <div></div>
+
+      <button
+        class="btn btn-secondary"
+        onclick="hideAbout()"
+      >
+        Close
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =======================================================
+     TOAST
+     ======================================================= -->
+
+<div
+  id="toast"
+  class="toast"
+></div>
+
+
+<script>
+
+/* =========================================================
+   GLOBAL STATE
+   ========================================================= */
+
+let invoices = [];
+let businesses = [];
+let selectedInvoiceId = null;
+
+
+/* =========================================================
+   API HELPER
+   ========================================================= */
+
+let currentUser = null;
+
+function showAuthScreen(message = ''){
+  document.getElementById('appShell').style.display = 'none';
+  const screen = document.getElementById('authScreen');
+  screen.style.display = 'flex';
+  showLoginView();
+  const error = document.getElementById('loginError');
+  error.textContent = message;
+  error.style.display = message ? 'block' : 'none';
+}
+
+function showLoginView(){
+  document.getElementById('loginView').style.display = 'block';
+  document.getElementById('registerView').style.display = 'none';
+  document.getElementById('registerError').style.display = 'none';
+  document.getElementById('registerSuccess').style.display = 'none';
+  document.getElementById('loginUsername').focus();
+}
+
+function showRegisterView(){
+  document.getElementById('loginView').style.display = 'none';
+  document.getElementById('registerView').style.display = 'block';
+  document.getElementById('loginError').style.display = 'none';
+  document.getElementById('registerError').style.display = 'none';
+  document.getElementById('registerSuccess').style.display = 'none';
+  document.getElementById('registerForm').reset();
+  document.getElementById('registerOrganization').focus();
+}
+
+function showAppShell(){
+  document.getElementById('authScreen').style.display = 'none';
+  document.getElementById('appShell').style.display = 'block';
+
+  const badge = document.getElementById('userBadge');
+  const name = document.getElementById('userName');
+  const role = document.getElementById('userRole');
+
+  if(currentUser){
+    name.textContent = currentUser.username || '';
+    role.textContent = currentUser.role ? `· ${currentUser.role}` : '';
+    badge.style.display = 'flex';
+  }
+}
+
+async function logout(){
+  const button = document.getElementById('logoutButton');
+  button.disabled = true;
+  button.textContent = 'Logging out…';
+
+  try{
+    await api('/api/logout', {method:'POST'});
+  }catch(error){
+    console.error(error);
+    button.disabled = false;
+    button.textContent = 'Log out';
+    alert(error.message || 'Could not log out. Please try again.');
+    return;
+  }
+
+  currentUser = null;
+  invoices = [];
+  businesses = [];
+  selectedInvoiceId = null;
+
+  document.getElementById('userBadge').style.display = 'none';
+  button.disabled = false;
+  button.textContent = 'Log out';
+  document.getElementById('loginForm').reset();
+  showAuthScreen();
+  document.getElementById('loginUsername').focus();
+}
+
+async function initializeAuthentication(){
+  try{
+    currentUser = await api('/api/me');
+    showAppShell();
+    await refresh();
+  }catch(error){
+    if(error.status === 401){
+      showAuthScreen();
+      return;
+    }
+    console.error(error);
+    showAuthScreen('Could not verify your session. Please try again.');
+  }
+}
+
+document.getElementById('registerForm').addEventListener('submit', async event => {
+  event.preventDefault();
+
+  const button = document.getElementById('registerSubmit');
+  const errorBox = document.getElementById('registerError');
+  const successBox = document.getElementById('registerSuccess');
+  const form = new FormData(event.currentTarget);
+
+  errorBox.style.display = 'none';
+  successBox.style.display = 'none';
+  button.disabled = true;
+  button.textContent = 'Creating account…';
+
+  try{
+    currentUser = await api('/api/register', {
+      method: 'POST',
+      body: form
+    });
+
+    successBox.textContent = `Account created for ${currentUser.username}. Opening your owner workspace…`;
+    successBox.style.display = 'block';
+
+    showAppShell();
+    await refresh();
+  }catch(error){
+    errorBox.textContent = error.message || 'Could not create your account.';
+    errorBox.style.display = 'block';
+  }finally{
+    button.disabled = false;
+    button.textContent = 'Create account';
+  }
+});
+
+document.getElementById('loginForm').addEventListener('submit', async event => {
+  event.preventDefault();
+  const button = document.getElementById('loginSubmit');
+  const errorBox = document.getElementById('loginError');
+  const form = new FormData(event.currentTarget);
+  errorBox.style.display = 'none';
+  button.disabled = true;
+  button.textContent = 'Signing in…';
+
+  try{
+    currentUser = await api('/api/login', {method:'POST', body:form});
+    showAppShell();
+    await refresh();
+  }catch(error){
+    errorBox.textContent = error.message || 'Invalid username or password.';
+    errorBox.style.display = 'block';
+  }finally{
+    button.disabled = false;
+    button.textContent = 'Sign in';
+  }
+});
+
+async function api(url, options = {}){
+
+  const response =
+    await fetch(url, options);
+
+  if(!response.ok){
+
+    let message;
+
+    try{
+
+      message =
+        await response.text();
+
+    }catch{
+
+      message =
+        'Request failed';
+
+    }
+
+    let detail = message;
+    try{
+      const parsed = JSON.parse(message);
+      detail = parsed.detail || message;
+    }catch{}
+    const error = new Error(
+      detail || `HTTP ${response.status}`
+    );
+    error.status = response.status;
+    throw error;
+
+  }
+
+  const contentType =
+    response.headers.get('content-type') || '';
+
+  if(
+    contentType.includes('application/json')
+  ){
+
+    return response.json();
+
+  }
+
+  return response;
+
+}
+
+
+/* =========================================================
+   FORMATTING
+   ========================================================= */
+
+function money(value){
+
+  if(
+    value === null ||
+    value === undefined ||
+    value === ''
+  ){
+
+    return '—';
+
+  }
+
+  return '₹' +
+    Number(value).toLocaleString(
+      'en-IN',
+      {
+        minimumFractionDigits:2,
+        maximumFractionDigits:2
+      }
+    );
+
+}
+
+
+function number(value){
+
+  if(
+    value === null ||
+    value === undefined ||
+    value === ''
+  ){
+
+    return '—';
+
+  }
+
+  return Number(value).toLocaleString(
+    'en-IN',
+    {
+      maximumFractionDigits:3
+    }
+  );
+
+}
+
+
+function escapeHtml(value){
+
+  if(
+    value === null ||
+    value === undefined
+  ){
+
+    return '';
+
+  }
+
+  return String(value)
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
+    .replaceAll('"','&quot;')
+    .replaceAll("'","&#039;");
+
+}
+
+
+function statusClass(status){
+
+  if(status === 'approved'){
+    return 'status-approved';
+  }
+
+  if(status === 'verified'){
+    return 'status-verified';
+  }
+
+  if(
+    status === 'needs_review' ||
+    !status
+  ){
+
+    return 'status-review';
+
+  }
+
+  return 'status-other';
+
+}
+
+
+function statusLabel(status){
+
+  if(!status){
+    return 'Needs review';
+  }
+
+  if(status === 'needs_review'){
+    return 'Needs review';
+  }
+
+  if(status === 'approved'){
+    return 'Approved';
+  }
+
+  if(status === 'verified'){
+    return 'Verified';
+  }
+
+  return status;
+
+}
+
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+let toastTimer = null;
+
+function toast(message, type = 'success'){
+
+  const element =
+    document.getElementById('toast');
+
+  element.textContent = message;
+
+  element.className =
+    `toast show ${type}`;
+
+  clearTimeout(toastTimer);
+
+  toastTimer =
+    setTimeout(
+      () => {
+        element.className = 'toast';
+      },
+      3000
+    );
+
+}
+
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+function scrollToSection(id){
+
+  const element =
+    document.getElementById(id);
+
+  if(element){
+
+    element.scrollIntoView({
+      behavior:'smooth',
+      block:'start'
+    });
+
+  }
+
+  closeSidebar();
+
+}
+
+
+function toggleSidebar(){
+
+  document
+    .getElementById('sidebar')
+    .classList.toggle('open');
+
+  document
+    .getElementById('sidebarOverlay')
+    .classList.toggle('open');
+
+}
+
+
+function closeSidebar(){
+
+  document
+    .getElementById('sidebar')
+    .classList.remove('open');
+
+  document
+    .getElementById('sidebarOverlay')
+    .classList.remove('open');
+
+}
+
+
+/* =========================================================
+   REFRESH EVERYTHING
+   ========================================================= */
+
+async function refresh(){
+
+  try{
+
+    invoices =
+      await api('/api/invoices');
+
+    businesses =
+      await api('/api/businesses');
+
+
+    configureRoleBasedWorkspace();
+
+
+    updateStats();
+
+    populateBusinessFilter();
+
+    renderInvoices();
+
+    renderClients();
+
+  }catch(error){
+
+    console.error(error);
+
+    toast(
+      'Could not refresh dashboard: ' +
+      error.message,
+      'error'
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   STATS
+   ========================================================= */
+
+function updateStats(){
+
+  const total =
+    invoices.length;
+
+  const approved =
+    invoices.filter(
+      x => x.status === 'approved'
+    ).length;
+
+  const review =
+    invoices.filter(
+      x =>
+        x.status !== 'approved' &&
+        x.status !== 'verified'
+    ).length;
+
+  const totalValue =
+    invoices.reduce(
+      (sum,x) =>
+        sum + Number(x.total_amount || 0),
+      0
+    );
+
+
+  document.getElementById('count')
+    .textContent = total;
+
+
+  document.getElementById('approved')
+    .textContent = approved;
+
+
+  document.getElementById('review')
+    .textContent = review;
+
+
+  document.getElementById('totalValue')
+    .textContent =
+      '₹' +
+      totalValue.toLocaleString(
+        'en-IN',
+        {
+          maximumFractionDigits:0
+        }
+      );
+
+}
+
+
+/* =========================================================
+   CLIENT FILTER
+   ========================================================= */
+
+function populateBusinessFilter(){
+
+  const select =
+    document.getElementById(
+      'businessFilter'
+    );
+
+  const current =
+    select.value;
+
+  select.innerHTML = `
+    <option value="">
+      All clients
+    </option>
+  `;
+
+
+  businesses.forEach(business => {
+
+    const option =
+      document.createElement('option');
+
+    option.value =
+      business.id;
+
+    option.textContent =
+      business.name;
+
+    select.appendChild(option);
+
+  });
+
+
+  if(
+    [...select.options]
+      .some(
+        option =>
+          option.value === current
+      )
+  ){
+
+    select.value = current;
+
+  }
+
+}
+
+
+/* =========================================================
+   INVOICE FILTERING
+   ========================================================= */
+
+function getFilteredInvoices(){
+
+  const search =
+    document
+      .getElementById('searchInput')
+      .value
+      .trim()
+      .toLowerCase();
+
+  const business =
+    document
+      .getElementById('businessFilter')
+      .value;
+
+  const status =
+    document
+      .getElementById('statusFilter')
+      .value;
+
+
+  return invoices.filter(invoice => {
+
+    const searchable = [
+
+      invoice.business_name,
+      invoice.supplier_name,
+      invoice.gstin,
+      invoice.invoice_number,
+      invoice.invoice_date,
+      invoice.status
+
+    ]
+      .filter(Boolean)
+      .join(' ')
+      .toLowerCase();
+
+
+    if(
+      search &&
+      !searchable.includes(search)
+    ){
+
+      return false;
+
+    }
+
+
+    if(
+      business &&
+      String(invoice.business_id) !==
+      String(business)
+    ){
+
+      return false;
+
+    }
+
+
+    if(
+      status &&
+      invoice.status !== status
+    ){
+
+      return false;
+
+    }
+
+
+    return true;
+
+  });
+
+}
+
+
+/* =========================================================
+   RENDER INVOICES
+   ========================================================= */
+
+function renderInvoices(){
+
+  const rows =
+    document.getElementById('rows');
+
+  const filtered =
+    getFilteredInvoices();
+
+
+  document.getElementById('resultCount')
+    .textContent =
+      `${filtered.length} invoice${
+        filtered.length === 1 ? '' : 's'
+      }`;
+
+
+  if(!filtered.length){
+
+    rows.innerHTML = `
+
+      <tr>
+
+        <td
+          colspan="8"
+          class="empty"
+        >
+
+          <div class="empty-icon">
+            ▤
+          </div>
+
+          <div class="empty-title">
+            No invoices found
+          </div>
+
+          <div class="empty-text">
+            Try changing your search or filters.
+          </div>
+
+        </td>
+
+      </tr>
+
+    `;
+
+    return;
+
+  }
+
+
+  rows.innerHTML =
+    filtered.map(invoice => {
+
+      const confidence =
+        Math.round(
+          Number(invoice.confidence || 0) * 100
+        );
+
+
+      const status =
+        statusLabel(invoice.status);
+
+
+      const statusClassName =
+        statusClass(invoice.status);
+
+
+      return `
+
+        <tr>
+
+          <td>
+
+            <div class="business-cell">
+
+              <div class="business-name">
+
+                ${
+                  invoice.business_name
+                  ? escapeHtml(
+                      invoice.business_name
+                    )
+                  : '<span style="color:#a16207">Unmatched</span>'
+                }
+
+              </div>
+
+
+              ${
+                invoice.business_gstin
+                ? `
+                  <div class="business-gstin">
+                    ${escapeHtml(
+                      invoice.business_gstin
+                    )}
+                  </div>
+                `
+                : ''
+              }
+
+            </div>
+
+          </td>
+
+
+          <td>
+
+            <div class="supplier">
+
+              ${escapeHtml(
+                invoice.supplier_name ||
+                'Unknown supplier'
+              )}
+
+            </div>
+
+          </td>
+
+
+          <td>
+
+            <div class="invoice-number">
+
+              ${escapeHtml(
+                invoice.invoice_number ||
+                'Not detected'
+              )}
+
+            </div>
+
+          </td>
+
+
+          <td>
+
+            ${escapeHtml(
+              invoice.invoice_date ||
+              '—'
+            )}
+
+          </td>
+
+
+          <td>
+
+            <div class="amount">
+
+              ${money(
+                invoice.total_amount
+              )}
+
+            </div>
+
+          </td>
+
+
+          <td>
+
+            <div class="confidence">
+
+              <div class="confidence-bar">
+
+                <div
+                  class="confidence-fill"
+                  style="width:${confidence}%"
+                ></div>
+
+              </div>
+
+              <span>
+                ${confidence}%
+              </span>
+
+            </div>
+
+          </td>
+
+
+          <td>
+
+            <span
+              class="status ${statusClassName}"
+            >
+
+              <span class="status-dot"></span>
+
+              ${escapeHtml(status)}
+
+            </span>
+
+          </td>
+
+
+          <td>
+
+            <div class="actions">
+
+              <button
+                class="btn btn-secondary btn-small"
+                onclick="viewInvoice(${invoice.id})"
+              >
+                View
+              </button>
+
+
+              ${
+                invoice.status !== 'approved'
+                ? `
+                  <button
+                    class="btn btn-success btn-small"
+                    onclick="approveInvoice(${invoice.id})"
+                  >
+                    Approve
+                  </button>
+                `
+                : ''
+              }
+
+
+              <button
+                class="btn btn-danger btn-small"
+                onclick="deleteInvoice(${invoice.id})"
+              >
+                Delete
+              </button>
+
+            </div>
+
+          </td>
+
+        </tr>
+
+      `;
+
+    }).join('');
+
+}
+
+
+/* =========================================================
+   CLIENT LIST
+   ========================================================= */
+
+function renderClients(){
+
+  const container =
+    document.getElementById(
+      'clientList'
+    );
+
+
+  if(!businesses.length){
+
+    container.innerHTML = `
+
+      <div class="empty">
+
+        <div class="empty-icon">
+          ◫
+        </div>
+
+        <div class="empty-title">
+          No clients yet
+        </div>
+
+        <div class="empty-text">
+          Add your first client business.
+        </div>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    businesses.map(business => {
+
+      const count =
+        invoices.filter(
+          invoice =>
+            String(invoice.business_id) ===
+            String(business.id)
+        ).length;
+
+
+      return `
+
+        <div
+          class="client-item"
+          onclick="filterByBusiness(${business.id})"
+        >
+
+          <div class="client-left">
+
+            <div class="client-name">
+
+              ${escapeHtml(
+                business.name
+              )}
+
+            </div>
+
+            <div class="client-gstin">
+
+              ${escapeHtml(
+                business.gstin
+              )}
+
+            </div>
+
+          </div>
+
+
+          <div class="client-count">
+
+            ${count}
+            ${count === 1 ? 'invoice' : 'invoices'}
+
+          </div>
+
+        </div>
+
+      `;
+
+    }).join('');
+
+}
+
+
+function filterByBusiness(id){
+
+  document.getElementById(
+    'businessFilter'
+  ).value = String(id);
+
+  renderInvoices();
+
+  scrollToSection('invoices');
+
+}
+
+
+/* =========================================================
+   VIEW INVOICE
+   ========================================================= */
+
+async function viewInvoice(id){
+
+  try{
+
+    const invoice =
+      invoices.find(
+        x => Number(x.id) === Number(id)
+      );
+
+
+    if(!invoice){
+
+      toast(
+        'Invoice not found.',
+        'error'
+      );
+
+      return;
+
+    }
+
+
+    selectedInvoiceId =
+      invoice.id;
+
+
+    const items =
+      await api(
+        `/api/invoices/${id}/items`
+      );
+
+
+    document.getElementById(
+      'modalTitle'
+    ).textContent =
+      invoice.invoice_number ||
+      'Invoice details';
+
+
+    document.getElementById(
+      'modalSubtitle'
+    ).textContent =
+      `${
+        invoice.business_name ||
+        'Unmatched business'
+      } · ${
+        invoice.supplier_name ||
+        'Unknown supplier'
+      }`;
+
+
+    /* -----------------------------------------------------
+       DETAIL CARDS
+       ----------------------------------------------------- */
+
+    document.getElementById(
+      'invoiceDetails'
+    ).innerHTML = `
+
+      <div class="detail">
+
+        <div class="detail-label">
+          Client business
+        </div>
+
+        <div class="detail-value">
+          ${escapeHtml(
+            invoice.business_name ||
+            'Unmatched'
+          )}
+        </div>
+
+      </div>
+
+
+      <div class="detail">
+
+        <div class="detail-label">
+          Supplier
+        </div>
+
+        <div class="detail-value">
+          ${escapeHtml(
+            invoice.supplier_name ||
+            'Not detected'
+          )}
+        </div>
+
+      </div>
+
+
+      <div class="detail">
+
+        <div class="detail-label">
+          GSTIN
+        </div>
+
+        <div class="detail-value">
+          ${escapeHtml(
+            invoice.gstin ||
+            'Not detected'
+          )}
+        </div>
+
+      </div>
+
+
+      <div class="detail">
+
+        <div class="detail-label">
+          Invoice date
+        </div>
+
+        <div class="detail-value">
+          ${escapeHtml(
+            invoice.invoice_date ||
+            'Not detected'
+          )}
+        </div>
+
+      </div>
+
+
+      <div class="detail">
+
+        <div class="detail-label">
+          Taxable value
+        </div>
+
+        <div class="detail-value">
+          ${money(
+            invoice.taxable_value
+          )}
+        </div>
+
+      </div>
+
+
+      <div class="detail">
+
+        <div class="detail-label">
+          CGST
+        </div>
+
+        <div class="detail-value">
+          ${money(
+            invoice.cgst
+          )}
+        </div>
+
+      </div>
+
+
+      <div class="detail">
+
+        <div class="detail-label">
+          SGST
+        </div>
+
+        <div class="detail-value">
+          ${money(
+            invoice.sgst
+          )}
+        </div>
+
+      </div>
+
+
+      <div class="detail">
+
+        <div class="detail-label">
+          IGST
+        </div>
+
+        <div class="detail-value">
+          ${money(
+            invoice.igst
+          )}
+        </div>
+
+      </div>
+
+
+      <div class="detail">
+
+        <div class="detail-label">
+          Total invoice
+        </div>
+
+        <div class="detail-value">
+          ${money(
+            invoice.total_amount
+          )}
+        </div>
+
+      </div>
+
+
+      <div class="detail">
+
+        <div class="detail-label">
+          Confidence
+        </div>
+
+        <div class="detail-value">
+          ${Math.round(
+            Number(invoice.confidence || 0) * 100
+          )}%
+        </div>
+
+      </div>
+
+    `;
+
+
+    /* -----------------------------------------------------
+       VALIDATION
+       ----------------------------------------------------- */
+
+    let arithmeticPassed =
+      false;
+
+    let itemPassed =
+      false;
+
+
+    if(
+      invoice.taxable_value !== null &&
+      invoice.total_amount !== null
+    ){
+
+      const taxes =
+        Number(invoice.cgst || 0) +
+        Number(invoice.sgst || 0) +
+        Number(invoice.igst || 0);
+
+
+      const calculated =
+        Number(invoice.taxable_value) +
+        taxes;
+
+
+      const difference =
+        Math.abs(
+          calculated -
+          Number(invoice.total_amount)
+        );
+
+
+      arithmeticPassed =
+        difference <=
+        Math.max(
+          1,
+          Number(invoice.total_amount) * .005
+        );
+
+    }
+
+
+    const itemTaxable =
+      items.reduce(
+        (sum,item) =>
+          sum +
+          Number(
+            item.taxable_value || 0
+          ),
+        0
+      );
+
+
+    if(items.length){
+
+      const difference =
+        Math.abs(
+          itemTaxable -
+          Number(
+            invoice.taxable_value || 0
+          )
+        );
+
+
+      itemPassed =
+        difference <=
+        Math.max(
+          1,
+          Number(
+            invoice.taxable_value || 0
+          ) * .005
+        );
+
+    }
+
+
+    document.getElementById(
+      'validation'
+    ).innerHTML = `
+
+      <div
+        class="validation-item ${
+          arithmeticPassed
+          ? 'validation-pass'
+          : 'validation-fail'
+        }"
+      >
+
+        ${arithmeticPassed ? '✓' : '⚠'}
+
+        Invoice arithmetic:
+        <strong>
+          ${
+            arithmeticPassed
+            ? 'Passed'
+            : 'Needs review'
+          }
+        </strong>
+
+      </div>
+
+
+      <div
+        class="validation-item ${
+          itemPassed
+          ? 'validation-pass'
+          : 'validation-fail'
+        }"
+      >
+
+        ${itemPassed ? '✓' : '⚠'}
+
+        Line-item total:
+        <strong>
+          ${
+            itemPassed
+            ? 'Passed'
+            : items.length
+              ? 'Needs review'
+              : 'No line items'
+          }
+        </strong>
+
+      </div>
+
+
+      <div
+        class="validation-item validation-pass"
+      >
+
+        ✓
+
+        Extraction confidence:
+        <strong>
+          ${Math.round(
+            Number(
+              invoice.confidence || 0
+            ) * 100
+          )}%
+        </strong>
+
+      </div>
+
+
+      <div
+        class="validation-item ${
+          invoice.business_id
+          ? 'validation-pass'
+          : 'validation-fail'
+        }"
+      >
+
+        ${
+          invoice.business_id
+          ? '✓'
+          : '⚠'
+        }
+
+        Client matching:
+        <strong>
+          ${
+            invoice.business_id
+            ? 'Matched'
+            : 'Needs review'
+          }
+        </strong>
+
+      </div>
+
+    `;
+
+
+    /* -----------------------------------------------------
+       ITEMS
+       ----------------------------------------------------- */
+
+    const itemRows =
+      document.getElementById(
+        'itemRows'
+      );
+
+
+    if(!items.length){
+
+      itemRows.innerHTML = `
+
+        <tr>
+
+          <td
+            colspan="6"
+            class="empty"
+          >
+            No line items were extracted.
+          </td>
+
+        </tr>
+
+      `;
+
+    }else{
+
+      itemRows.innerHTML =
+        items.map(item => `
+
+          <tr>
+
+            <td>
+              ${escapeHtml(
+                item.serial_no
+              )}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                item.description ||
+                '—'
+              )}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                item.hsn_sac ||
+                '—'
+              )}
+            </td>
+
+            <td>
+              ${number(
+                item.quantity
+              )}
+            </td>
+
+            <td>
+              ${money(
+                item.rate
+              )}
+            </td>
+
+            <td>
+              ${money(
+                item.taxable_value
+              )}
+            </td>
+
+          </tr>
+
+        `).join('');
+
+    }
+
+
+    document.getElementById(
+      'itemsTotal'
+    ).innerHTML = `
+
+      <div class="total-box">
+
+        Line items total:
+        ${money(itemTaxable)}
+
+      </div>
+
+    `;
+
+
+    /* -----------------------------------------------------
+       MODAL BUTTONS
+       ----------------------------------------------------- */
+
+    const approveButton =
+      document.getElementById(
+        'modalApproveButton'
+      );
+
+
+    if(
+      invoice.status === 'approved'
+    ){
+
+      approveButton.style.display =
+        'none';
+
+    }else{
+
+      approveButton.style.display =
+        'inline-flex';
+
+      approveButton.onclick =
+        () => approveInvoice(invoice.id);
+
+    }
+
+
+    document.getElementById(
+      'modalDeleteButton'
+    ).onclick =
+      () => deleteInvoice(invoice.id);
+
+
+    document.getElementById(
+      'invoiceModal'
+    ).classList.add('open');
+
+
+  }catch(error){
+
+    console.error(error);
+
+    toast(
+      'Could not load invoice: ' +
+      error.message,
+      'error'
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+function hideModal(){
+
+  document
+    .getElementById('invoiceModal')
+    .classList.remove('open');
+
+  selectedInvoiceId =
+    null;
+
+}
+
+
+function closeModal(event){
+
+  if(
+    event.target.id ===
+    'invoiceModal'
+  ){
+
+    hideModal();
+
+  }
+
+}
+
+
+/* =========================================================
+   APPROVE
+   ========================================================= */
+
+async function approveInvoice(id){
+
+  if(
+    !confirm(
+      'Approve this invoice?'
+    )
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    await api(
+      `/api/invoices/${id}/approve`,
+      {
+        method:'POST'
+      }
+    );
+
+
+    hideModal();
+
+    await refresh();
+
+
+    toast(
+      'Invoice approved successfully.'
+    );
+
+  }catch(error){
+
+    toast(
+      'Could not approve invoice: ' +
+      error.message,
+      'error'
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   DELETE
+   ========================================================= */
+
+async function deleteInvoice(id){
+
+  const invoice =
+    invoices.find(
+      x => Number(x.id) === Number(id)
+    );
+
+
+  const invoiceNumber =
+    invoice?.invoice_number ||
+    `#${id}`;
+
+
+  if(
+    !confirm(
+      `Delete invoice ${invoiceNumber}?\n\n` +
+      'The invoice, line items and uploaded file will be deleted.'
+    )
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    await api(
+      `/api/invoices/${id}`,
+      {
+        method:'DELETE'
+      }
+    );
+
+
+    hideModal();
+
+    await refresh();
+
+
+    toast(
+      'Invoice deleted successfully.'
+    );
+
+  }catch(error){
+
+    toast(
+      'Could not delete invoice: ' +
+      error.message,
+      'error'
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   FILE UPLOAD
+   ========================================================= */
+
+const fileInput =
+  document.getElementById(
+    'fileInput'
+  );
+
+
+fileInput.addEventListener(
+  'change',
+  renderSelectedFiles
+);
+
+
+function renderSelectedFiles(){
+
+  const files =
+    [...fileInput.files];
+
+
+  const list =
+    document.getElementById(
+      'uploadList'
+    );
+
+
+  if(!files.length){
+
+    list.style.display =
+      'none';
+
+    list.innerHTML =
+      '';
+
+    return;
+
+  }
+
+
+  list.style.display =
+    'block';
+
+
+  list.innerHTML =
+    files.map(
+      (file,index) => `
+
+        <div
+          class="upload-file"
+          id="upload-file-${index}"
+        >
+
+          <div class="upload-file-name">
+
+            ${escapeHtml(
+              file.name
+            )}
+
+          </div>
+
+          <div
+            class="upload-file-status"
+            id="upload-status-${index}"
+          >
+            Ready
+          </div>
+
+        </div>
+
+      `
+    ).join('');
+
+}
+
+
+async function processSelectedFiles(){
+
+  const files =
+    [...fileInput.files];
+
+
+  if(!files.length){
+
+    toast(
+      'Please select at least one invoice.',
+      'error'
+    );
+
+    return;
+
+  }
+
+
+  const status =
+    document.getElementById(
+      'uploadStatus'
+    );
+
+
+  status.style.display =
+    'block';
+
+
+  status.textContent =
+    `Preparing ${files.length} invoice${
+      files.length === 1 ? '' : 's'
+    }...`;
+
+
+  let successful = 0;
+  let failed = 0;
+
+
+  for(
+    let i = 0;
+    i < files.length;
+    i++
+  ){
+
+    const file =
+      files[i];
+
+
+    const fileStatus =
+      document.getElementById(
+        `upload-status-${i}`
+      );
+
+
+    if(fileStatus){
+
+      fileStatus.textContent =
+        'Processing...';
+
+    }
+
+
+    status.textContent =
+      `Processing ${i + 1} of ${files.length}\n` +
+      file.name;
+
+
+    try{
+
+      const form =
+        new FormData();
+
+      form.append(
+        'file',
+        file
+      );
+
+
+      const result =
+        await api(
+          '/api/invoices/upload',
+          {
+            method:'POST',
+            body:form
+          }
+        );
+
+
+      successful++;
+
+
+      if(fileStatus){
+
+        fileStatus.textContent =
+          result.status === 'verified'
+          ? '✓ Verified'
+          : '⚠ Review';
+
+      }
+
+    }catch(error){
+
+      failed++;
+
+
+      if(fileStatus){
+
+        fileStatus.textContent =
+          '✕ Failed';
+
+      }
+
+      console.error(
+        file.name,
+        error
+      );
+
+    }
+
+  }
+
+
+  status.textContent =
+    `Finished.\n` +
+    `Successful: ${successful}\n` +
+    `Failed: ${failed}`;
+
+
+  fileInput.value =
+    '';
+
+
+  await refresh();
+
+
+  if(failed){
+
+    toast(
+      `${successful} processed, ${failed} failed.`,
+      'error'
+    );
+
+  }else{
+
+    toast(
+      `${successful} invoice${
+        successful === 1 ? '' : 's'
+      } processed successfully.`
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   DRAG AND DROP
+   ========================================================= */
+
+const uploadZone =
+  document.getElementById(
+    'uploadZone'
+  );
+
+
+uploadZone.addEventListener(
+  'dragover',
+  event => {
+
+    event.preventDefault();
+
+    uploadZone.classList.add(
+      'dragover'
+    );
+
+  }
+);
+
+
+uploadZone.addEventListener(
+  'dragleave',
+  () => {
+
+    uploadZone.classList.remove(
+      'dragover'
+    );
+
+  }
+);
+
+
+uploadZone.addEventListener(
+  'drop',
+  event => {
+
+    event.preventDefault();
+
+    uploadZone.classList.remove(
+      'dragover'
+    );
+
+
+    const files =
+      [...event.dataTransfer.files];
+
+
+    if(!files.length){
+      return;
+    }
+
+
+    const data =
+      new DataTransfer();
+
+
+    files.forEach(file => {
+
+      data.items.add(file);
+
+    });
+
+
+    fileInput.files =
+      data.files;
+
+
+    renderSelectedFiles();
+
+  }
+);
+
+
+/* =========================================================
+   ADD BUSINESS
+   ========================================================= */
+
+function showAddBusiness(){
+
+  document.getElementById(
+    'businessModal'
+  ).classList.add('open');
+
+
+  setTimeout(
+    () => {
+
+      document.getElementById(
+        'businessNameInput'
+      ).focus();
+
+    },
+    100
+  );
+
+}
+
+
+function hideAddBusiness(){
+
+  document.getElementById(
+    'businessModal'
+  ).classList.remove('open');
+
+}
+
+
+function closeBusinessModal(event){
+
+  if(
+    event.target.id ===
+    'businessModal'
+  ){
+
+    hideAddBusiness();
+
+  }
+
+}
+
+
+async function addBusiness(){
+
+  const name =
+    document
+      .getElementById(
+        'businessNameInput'
+      )
+      .value
+      .trim();
+
+
+  const gstin =
+    document
+      .getElementById(
+        'businessGstinInput'
+      )
+      .value
+      .trim()
+      .toUpperCase();
+
+
+  if(!name || !gstin){
+
+    toast(
+      'Enter both business name and GSTIN.',
+      'error'
+    );
+
+    return;
+
+  }
+
+
+  try{
+
+    const form =
+      new FormData();
+
+    form.append(
+      'name',
+      name
+    );
+
+    form.append(
+      'gstin',
+      gstin
+    );
+
+
+    await api(
+      '/api/businesses',
+      {
+        method:'POST',
+        body:form
+      }
+    );
+
+
+    document.getElementById(
+      'businessNameInput'
+    ).value = '';
+
+
+    document.getElementById(
+      'businessGstinInput'
+    ).value = '';
+
+
+    hideAddBusiness();
+
+
+    await refresh();
+
+
+    toast(
+      `${name} added successfully.`
+    );
+
+  }catch(error){
+
+    toast(
+      'Could not add business: ' +
+      error.message,
+      'error'
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   REVIEW QUEUE
+   ========================================================= */
+
+
+/* =========================================================
+   TEAM / STAFF MANAGEMENT
+   ========================================================= */
+
+let selectedStaffId = null;
+
+
+function isOwner(){
+
+  return currentUser &&
+         currentUser.role === 'OWNER';
+
+}
+
+
+function configureRoleBasedWorkspace(){
+
+  const teamNav =
+    document.getElementById('teamNavItem');
+
+  const teamSection =
+    document.getElementById('teamSection');
+
+  if(!currentUser){
+
+    if(teamNav){
+      teamNav.style.display = 'none';
+    }
+
+    if(teamSection){
+      teamSection.style.display = 'none';
+    }
+
+    return;
+
+  }
+
+
+  if(isOwner()){
+
+    if(teamNav){
+      teamNav.style.display = 'flex';
+    }
+
+    document.querySelector(
+      '.page-title'
+    ).textContent =
+      'Owner Workspace';
+
+    document.querySelector(
+      '.page-subtitle'
+    ).textContent =
+      'Manage invoices, clients, staff and exports';
+
+  }else{
+
+    if(teamNav){
+      teamNav.style.display = 'none';
+    }
+
+    if(teamSection){
+      teamSection.style.display = 'none';
+    }
+
+    document.querySelector(
+      '.page-title'
+    ).textContent =
+      'Staff Workspace';
+
+    document.querySelector(
+      '.page-subtitle'
+    ).textContent =
+      'Process assigned client invoices and complete reviews';
+
+  }
+
+}
+
+
+function showTeam(){
+
+  if(!isOwner()){
+    return;
+  }
+
+  const section =
+    document.getElementById(
+      'teamSection'
+    );
+
+  if(!section){
+    return;
+  }
+
+  section.style.display = 'block';
+
+  loadTeam();
+
+  section.scrollIntoView({
+    behavior:'smooth',
+    block:'start'
+  });
+
+  closeSidebar();
+
+}
+
+
+async function loadTeam(){
+
+  if(!isOwner()){
+    return;
+  }
+
+  const loading =
+    document.getElementById(
+      'teamLoading'
+    );
+
+  const table =
+    document.getElementById(
+      'teamTableWrap'
+    );
+
+  const errorBox =
+    document.getElementById(
+      'teamError'
+    );
+
+  loading.style.display = 'block';
+  table.style.display = 'none';
+  errorBox.style.display = 'none';
+
+  try{
+
+    const staff =
+      await api('/api/staff');
+
+    renderTeam(staff);
+
+  }catch(error){
+
+    loading.style.display = 'none';
+
+    errorBox.textContent =
+      error.message ||
+      'Could not load team.';
+
+    errorBox.style.display =
+      'block';
+
+  }
+
+}
+
+
+function renderTeam(staff){
+
+  const loading =
+    document.getElementById(
+      'teamLoading'
+    );
+
+  const table =
+    document.getElementById(
+      'teamTableWrap'
+    );
+
+  const rows =
+    document.getElementById(
+      'teamRows'
+    );
+
+  loading.style.display = 'none';
+  table.style.display = 'block';
+
+
+  if(!staff.length){
+
+    rows.innerHTML = `
+      <tr>
+        <td colspan="5">
+          <div class="empty">
+            <div class="empty-title">
+              No staff members yet
+            </div>
+
+            <div class="empty-text">
+              Add a staff account to start assigning client businesses.
+            </div>
+          </div>
+        </td>
+      </tr>
+    `;
+
+    return;
+
+  }
+
+
+  rows.innerHTML =
+    staff.map(member => {
+
+      const active =
+        Number(member.active) === 1;
+
+      const status =
+        active
+          ? '<span class="status-badge status-verified">Active</span>'
+          : '<span class="status-badge status-review">Inactive</span>';
+
+      const lastLogin =
+        member.last_login
+          ? escapeHtml(
+              new Date(
+                member.last_login
+              ).toLocaleString()
+            )
+          : 'Never';
+
+      return `
+        <tr>
+
+          <td>
+            <div style="font-weight:700;">
+              ${escapeHtml(member.username)}
+            </div>
+
+            <div
+              style="
+                font-size:10px;
+                color:var(--muted);
+              "
+            >
+              Staff
+            </div>
+          </td>
+
+          <td>
+            ${status}
+          </td>
+
+          <td>
+            ${Number(
+              member.assigned_businesses || 0
+            )}
+          </td>
+
+          <td>
+            ${lastLogin}
+          </td>
+
+          <td style="text-align:right;">
+
+            <button
+              class="btn btn-secondary"
+              onclick="showStaffDetail(${Number(member.id)})"
+            >
+              Manage
+            </button>
+
+          </td>
+
+        </tr>
+      `;
+
+    }).join('');
+
+}
+
+
+function showCreateStaffModal(){
+
+  if(!isOwner()){
+    return;
+  }
+
+  document.getElementById(
+    'staffUsernameInput'
+  ).value = '';
+
+  document.getElementById(
+    'staffPasswordInput'
+  ).value = '';
+
+  document.getElementById(
+    'createStaffError'
+  ).style.display = 'none';
+
+  document.getElementById(
+    'createStaffModal'
+  ).classList.add('open');
+
+}
+
+
+function hideCreateStaffModal(){
+
+  document.getElementById(
+    'createStaffModal'
+  ).classList.remove('open');
+
+}
+
+
+function closeCreateStaff(event){
+
+  if(
+    event.target.id ===
+    'createStaffModal'
+  ){
+
+    hideCreateStaffModal();
+
+  }
+
+}
+
+
+async function createStaff(){
+
+  if(!isOwner()){
+    return;
+  }
+
+  const username =
+    document.getElementById(
+      'staffUsernameInput'
+    ).value.trim();
+
+  const password =
+    document.getElementById(
+      'staffPasswordInput'
+    ).value;
+
+  const errorBox =
+    document.getElementById(
+      'createStaffError'
+    );
+
+  const button =
+    document.getElementById(
+      'createStaffButton'
+    );
+
+
+  errorBox.style.display = 'none';
+
+  const form =
+    new FormData();
+
+  form.append(
+    'username',
+    username
+  );
+
+  form.append(
+    'password',
+    password
+  );
+
+
+  button.disabled = true;
+  button.textContent = 'Creating...';
+
+
+  try{
+
+    const result =
+      await api(
+        '/api/staff',
+        {
+          method:'POST',
+          body:form
+        }
+      );
+
+    toast(
+      `Staff account "${result.username}" created successfully.`,
+      'success'
+    );
+
+    hideCreateStaffModal();
+
+    await loadTeam();
+
+  }catch(error){
+
+    errorBox.textContent =
+      error.message ||
+      'Could not create staff account.';
+
+    errorBox.style.display =
+      'block';
+
+  }finally{
+
+    button.disabled = false;
+    button.textContent = 'Create staff';
+
+  }
+
+}
+
+
+async function showStaffDetail(staffId){
+
+  if(!isOwner()){
+    return;
+  }
+
+  selectedStaffId =
+    Number(staffId);
+
+  document.getElementById(
+    'staffDetailError'
+  ).style.display = 'none';
+
+  document.getElementById(
+    'staffDetailModal'
+  ).classList.add('open');
+
+
+  try{
+
+    const staff =
+      await api(
+        `/api/staff/${selectedStaffId}`
+      );
+
+    renderStaffDetail(staff);
+
+  }catch(error){
+
+    const box =
+      document.getElementById(
+        'staffDetailError'
+      );
+
+    box.textContent =
+      error.message ||
+      'Could not load staff member.';
+
+    box.style.display =
+      'block';
+
+  }
+
+}
+
+
+function renderStaffDetail(staff){
+
+  document.getElementById(
+    'staffDetailTitle'
+  ).textContent =
+    staff.username;
+
+  document.getElementById(
+    'staffDetailSubtitle'
+  ).textContent =
+    'Manage client business access';
+
+
+  const active =
+    Number(staff.active) === 1;
+
+  document.getElementById(
+    'staffDetailStatus'
+  ).textContent =
+    active
+      ? 'Active'
+      : 'Inactive';
+
+
+  const assigned =
+    Array.isArray(staff.businesses)
+      ? staff.businesses
+      : [];
+
+
+  document.getElementById(
+    'staffDetailCount'
+  ).textContent =
+    String(
+      assigned.length
+    );
+
+
+  const container =
+    document.getElementById(
+      'staffAssignedBusinesses'
+    );
+
+
+  if(!assigned.length){
+
+    container.innerHTML = `
+      <div
+        class="empty"
+        style="padding:18px;"
+      >
+        No businesses assigned yet.
+      </div>
+    `;
+
+  }else{
+
+    container.innerHTML =
+      assigned.map(
+        business => `
+          <div
+            style="
+              display:flex;
+              align-items:center;
+              justify-content:space-between;
+              gap:12px;
+              padding:11px 0;
+              border-bottom:1px solid var(--border);
+            "
+          >
+
+            <div>
+
+              <div style="font-weight:700;">
+                ${escapeHtml(business.name)}
+              </div>
+
+              <div
+                style="
+                  font-size:10px;
+                  color:var(--muted);
+                  margin-top:3px;
+                "
+              >
+                ${escapeHtml(business.gstin)}
+              </div>
+
+            </div>
+
+            <button
+              class="btn btn-secondary"
+              onclick="unassignBusiness(${Number(business.id)})"
+              ${active ? '' : 'disabled'}
+            >
+              Remove
+            </button>
+
+          </div>
+        `
+      ).join('');
+
+  }
+
+
+  const select =
+    document.getElementById(
+      'staffBusinessSelect'
+    );
+
+
+  const assignedIds =
+    new Set(
+      assigned.map(
+        business =>
+          Number(business.id)
+      )
+    );
+
+
+  const available =
+    businesses.filter(
+      business =>
+        !assignedIds.has(
+          Number(business.id)
+        )
+    );
+
+
+  if(!available.length){
+
+    select.innerHTML =
+      '<option value="">All businesses assigned</option>';
+
+    select.disabled = true;
+
+  }else{
+
+    select.disabled =
+      !active;
+
+    select.innerHTML =
+      '<option value="">Select a business...</option>' +
+
+      available.map(
+        business => `
+          <option value="${Number(business.id)}">
+            ${escapeHtml(business.name)}
+            ? ${escapeHtml(business.gstin)}
+          </option>
+        `
+      ).join('');
+
+  }
+
+
+  const deactivate =
+    document.getElementById(
+      'deactivateStaffButton'
+    );
+
+  deactivate.disabled =
+    !active;
+
+  deactivate.textContent =
+    active
+      ? 'Deactivate staff'
+      : 'Staff inactive';
+
+}
+
+
+async function assignSelectedBusiness(){
+
+  if(
+    !isOwner() ||
+    !selectedStaffId
+  ){
+    return;
+  }
+
+  const select =
+    document.getElementById(
+      'staffBusinessSelect'
+    );
+
+  const businessId =
+    Number(select.value);
+
+
+  if(!businessId){
+
+    toast(
+      'Select a business first.',
+      'error'
+    );
+
+    return;
+
+  }
+
+
+  try{
+
+    await api(
+      `/api/staff/${selectedStaffId}/businesses/${businessId}`,
+      {
+        method:'POST'
+      }
+    );
+
+    toast(
+      'Business assigned successfully.',
+      'success'
+    );
+
+    await refresh();
+
+    await showStaffDetail(
+      selectedStaffId
+    );
+
+  }catch(error){
+
+    toast(
+      error.message ||
+      'Could not assign business.',
+      'error'
+    );
+
+  }
+
+}
+
+
+async function unassignBusiness(businessId){
+
+  if(
+    !isOwner() ||
+    !selectedStaffId
+  ){
+    return;
+  }
+
+
+  try{
+
+    await api(
+      `/api/staff/${selectedStaffId}/businesses/${Number(businessId)}`,
+      {
+        method:'DELETE'
+      }
+    );
+
+    toast(
+      'Business access removed.',
+      'success'
+    );
+
+    await refresh();
+
+    await showStaffDetail(
+      selectedStaffId
+    );
+
+  }catch(error){
+
+    toast(
+      error.message ||
+      'Could not remove business access.',
+      'error'
+    );
+
+  }
+
+}
+
+
+async function deactivateSelectedStaff(){
+
+  if(
+    !isOwner() ||
+    !selectedStaffId
+  ){
+    return;
+  }
+
+
+  if(
+    !confirm(
+      'Deactivate this staff account? They will immediately lose access.'
+    )
+  ){
+    return;
+  }
+
+
+  const button =
+    document.getElementById(
+      'deactivateStaffButton'
+    );
+
+  button.disabled = true;
+  button.textContent =
+    'Deactivating...';
+
+
+  try{
+
+    await api(
+      `/api/staff/${selectedStaffId}/deactivate`,
+      {
+        method:'POST'
+      }
+    );
+
+    toast(
+      'Staff account deactivated.',
+      'success'
+    );
+
+    await loadTeam();
+
+    await showStaffDetail(
+      selectedStaffId
+    );
+
+  }catch(error){
+
+    button.disabled = false;
+
+    button.textContent =
+      'Deactivate staff';
+
+    toast(
+      error.message ||
+      'Could not deactivate staff.',
+      'error'
+    );
+
+  }
+
+}
+
+
+function hideStaffDetailModal(){
+
+  document.getElementById(
+    'staffDetailModal'
+  ).classList.remove('open');
+
+  selectedStaffId = null;
+
+}
+
+
+function closeStaffDetail(event){
+
+  if(
+    event.target.id ===
+    'staffDetailModal'
+  ){
+
+    hideStaffDetailModal();
+
+  }
+
+}
+
+
+function showReviewQueue(){
+
+  const select =
+    document.getElementById(
+      'statusFilter'
+    );
+
+
+  select.value =
+    'needs_review';
+
+
+  renderInvoices();
+
+  scrollToSection(
+    'invoices'
+  );
+
+  closeSidebar();
+
+}
+
+
+/* =========================================================
+   ABOUT
+   ========================================================= */
+
+function showAbout(){
+
+  document.getElementById(
+    'aboutModal'
+  ).classList.add('open');
+
+}
+
+
+function hideAbout(){
+
+  document.getElementById(
+    'aboutModal'
+  ).classList.remove('open');
+
+}
+
+
+function closeAbout(event){
+
+  if(
+    event.target.id ===
+    'aboutModal'
+  ){
+
+    hideAbout();
+
+  }
+
+}
+
+
+/* =========================================================
+   KEYBOARD SHORTCUTS
+   ========================================================= */
+
+document.addEventListener(
+  'keydown',
+  event => {
+
+    if(
+      event.key === 'Escape'
+    ){
+
+      hideModal();
+
+      hideAddBusiness();
+
+      hideAbout();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   INITIAL LOAD
+   ========================================================= */
+
+initializeAuthentication();
+
+</script>
+
+</body>
+</html>

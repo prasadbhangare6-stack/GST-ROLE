@@ -1,0 +1,24 @@
+.venv/
+__pycache__/
+*.pyc
+
+data/
+gstflow.db
+gstflow-cookies.txt
+
+.env
+.env.*
+!.env.example
+
+*.sqlite
+*.sqlite3
+
+*.log
+
+# Local backup files
+*.backup_*
+
+# Local backup files
+*.backup_*
+
+app/*.backup_*
