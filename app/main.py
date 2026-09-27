@@ -1121,9 +1121,10 @@ async def upload_invoice(
                 status,
                 review_reasons,
                 verification_checks,
-                raw_text
+                raw_text,
+                uploaded_by
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 business_id,
@@ -1150,6 +1151,7 @@ async def upload_invoice(
                     ensure_ascii=False,
                 ),
                 text,
+                current_user["user_id"],
             )
         )
 
